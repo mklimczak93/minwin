@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="form-create" style="height:550px;">
+    <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column align-items-center">
+            {% load static %}
+                <img src="{% static 'minvin_logo_big.png' %}" alt="Logo" width="100" height="50" class="d-inline-block align-text-top">
+
+            <h5>create listing</h5>
+                <form action="{% url 'create'%}" method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <!-- Title -->
+                        <input class="form-control" type="text" name="title" placeholder="title">
+
+                        <!-- Description -->
+                        <textarea class="form-control" name="description" rows="6" placeholder="write the description here..."></textarea>
+
+                        <!-- Price -->
+                        <input class="form-control" type="number" name="price" placeholder="price">
+
+                        <!-- Date -->
+                        <input class="form-control" type="date" name="date">
+
+                        <!-- Category -->
+                        <select class="form-select" name="category" style="width: 350px">
+                            <option selected>choose a category:</option>
+                            <option value="CH">chairs</option>
+                            <option value="CA">cabinets</option>
+                            <option value="SO">sofas</option>
+                            <option value="TA">tables</option>
+                            <option value="DE">decor</option>
+                            <option value="OT">others</option>
+                          </select>
+
+                        <!-- Photo -->
+                        <input class="form-control" type="file" id="formFile" name="photo" style="width: 350px"
+                        style="padding: 0px">
+                        <input class="btn btn-dark" style="width:350px" type="submit" value="add listing">
+                    </div>
+
+                </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

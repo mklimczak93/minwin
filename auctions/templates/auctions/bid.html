@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="d-flex justify-content-center" style="margin-top: 50px">
+        <div class="d-flex flex-column align-items-left" style="margin-right: 50px">
+                <div style="margin-bottom: 50px">
+                    <h5>You are bidding on: </h5>
+                    <h3>{{listing.title}}</h3>
+                </div>
+                <div>
+                    <h5>Current price:</h5>
+                    <h5>{{listing.price}} €</h5>
+                </div>
+                <div style="margin-top: 30px">
+                    Auction will finish at:<br>
+                    {{listing.date}}
+                </div>
+                <div style="margin-top: 60px">
+                    {% if listing.status %}
+                    <form action="{% url 'bid' listing_id=listing.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group" style="width: 300px;">
+                            <input class="form-control" type="number" name="bid_amount" placeholder="bid amount">
+                            <input class="btn btn-dark" type="submit" value="make a bid" style="width: 300px;">
+                        </div>
+                    </form>
+                    {% else %}
+                    sold
+                    {% endif %}
+                </div>
+        </div>
+
+        <img src="{{ listing.photo.url }}" alt="Listing photo" width="375" height="450">
+
+        <div class="container" style="height:100px; width:100px; background-color: #332D2D; vertical-align: middle; margin-left: -40px; margin-top: 30px;">
+            <p style="color: white; text-align:center; font-size: 20px; margin-top: 35px;">nice!</p>
+        </div>
+
+        {% if message %}
+        <div class="container" style="height:100px; width:210px; background-color: #332D2D; vertical-align: middle; margin-left: -40px; margin-top: 150px;">
+            <p style="color: white; text-align:center; font-size: 12px; margin-top: 20px;">{{message}}</p>
+            <p style="color: white; text-align:center; font-size: 16px; margin-top: -15px;">{{listing.date}}.</p>
+        </div>
+        {% endif %}
+
+
+    </div>
+
+
+{% endblock %}

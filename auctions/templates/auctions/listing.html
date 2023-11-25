@@ -1,0 +1,119 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!-- MESSAGE ABOUT WINNING AUCTION -->
+{% if not listing.status and user.get_username == listing.bidder %}
+<div class="container" style="height:100px; background-color: #E3EAD5; align-items: center; justify-content: center; margin-bottom:20px; padding-top:20px;">
+    <h3 style="color: white; text-align:center; vertical-align: middle;">Congratulations!</h3>
+    <p style="color: white; text-align:center; font-size: 16px; margin-top: 0px;">You won the auction!</p>
+</div>
+{% endif %}
+
+<!-- MAIN LISTING ITEMS-->
+<div class="d-flex justify-content-center">
+
+        <img src="{{ listing.photo.url }}" alt="Listing photo" width="375" height="500">
+
+        <div class="d-flex flex-column align-items-left" style="margin: 80px">
+            <div style="margin-bottom: 10px; margin-top: -30px">
+                {{listing.get_category_display}}
+            </div>
+            <div>
+                <h3>{{listing.title}}</h3>
+            </div>
+            <div style="margin-bottom: 0px">
+                <p>listed by: {{listing.owner}}</p>
+            </div>
+            <div style="margin-top: -10px; margin-bottom: 30px">
+                <p>highest bidder: {{listing.bidder}}</p>
+            </div>
+            <div>
+                <h5>{{listing.price}} €</h5>
+            </div>
+            <div style="margin-top: 30px">
+                {{listing.description}}
+            </div>
+            <div style="margin-top: 50px">
+                {% if listing.status %}
+                    <div class="form-group" style="width: 300px;">
+                        <a href="{% url 'bid' listing_id=listing.id %}" class="btn btn-dark" style="width:300px">
+                            make a bid
+                        </a>
+                    </div>
+                </form>
+                {% else %}
+                sold
+                {% endif %}
+            </div>
+            <div class="row" style="margin-left:0px;">
+                <div>
+                    <form action="{% url 'watchlist' user_id=user.id listing_id=listing.id %}" method="POST" enctype='multipart/form-data'>
+                            {% csrf_token %}
+                        <input class="btn btn-dark" style="width:145px; margin-right:10px;" type="submit" value="add to watchlist">
+                    </form>
+                </div>
+                <div>
+                    {%if user.get_username == listing.owner.username %}
+                    <form action="{% url 'remove_listing' listing_id=listing.id %}" method="POST" enctype='multipart/form-data'>
+                            {% csrf_token %}
+                        <input class="btn btn-dark" style="width:145px;" type="submit" value="delete listing">
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--COMMENTS SCETION-->
+
+<div class="row d-flex justify-content-left" style="width:1600px; height:500px; margin-left:25px; margin-top:50px;">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-0 border" style="background-color: #ffffff; border-radius: 0rem;">
+
+        <div class="card-body p-4">
+            {% if user.is_authenticated %}
+            <form action="{% url 'comment' listing_id=listing.id %}" method="POST" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                    <input type="text" name="text" id="addANote" class="form-control" placeholder="Type comment..." />
+                    <input class="btn btn-dark" style="width:200px" type="submit" value="+ add a comment">
+                </div>
+            </form>
+            {% endif %}
+
+        {% for comment in comments %}
+
+            <div class="card mb-4">
+            <div class="card-body">
+                <p>{{comment.text}}</p>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-row align-items-center">
+                            <div style="margin-right:10px;">
+                            <img src="{{ comment.owner.profile_photo.url }}" alt="avatar" width="25" height="25">
+                            </div>
+                            <p class="small mb-0 ms-2">{{comment.owner}}</p>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                            <form action="{% url 'upvote' listing_id=listing.id comment_id=comment.id %}" method="POST" enctype='multipart/form-data'>
+                                {% csrf_token %}
+                                <div class="row">
+                                <input class="btn btn-light" style="border-radius:0rem; font-size:12px; margin:0px;" type="submit" value="Upvote">
+                                <p class="small text-muted mb-0" style="margin: 5px;">{{ comment.upvotes }}</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+        {% endfor %}
+        </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

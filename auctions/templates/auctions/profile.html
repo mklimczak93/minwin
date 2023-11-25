@@ -1,0 +1,43 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="d-flex justify-content-center align-items-center">
+
+    <img src="{{ user.profile_photo.url }}" alt="Listing photo" width="300" height="300">
+
+    <div class="d-flex flex-column align-items-left" style="margin: 50px">
+
+        <div style="margin-bottom: 10px; margin-top: 10px">
+            <h5> Your profile information: </h5>
+        </div>
+        <div>
+            <h5>username: {{user.username}}</h5>
+        </div>
+
+        <div>
+            <h5>first name: {{user.first_name}} </h5>
+        </div>
+        <div>
+            <h5>last name: {{user.last_name}} </h5>
+        </div>
+        <div>
+            <h5>e-mail address: {{user.email}} </h5>
+        </div>
+        <div>
+            <h5>date joined: {{user.date_joined}} </h5>
+        </div>
+
+        <div style="margin-top: 50px">
+                <div class="form-group" style="width: 300px;">
+                    <a href="{% url 'view_watchlist' user_id=user.id %}" class="btn btn-dark" style="width:300px">
+                        view your watchlist
+                    </a>
+                </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+{% endblock %}

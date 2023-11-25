@@ -1,0 +1,55 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="d-flex justify-content-left">
+    <div class="d-flex flex-column align-items-left">
+        <h5>Your watchlist</h5>
+        <hr style="width:100%;">
+                {% for listing in watchlist %}
+
+                <div class="row" style="margin-bottom:20px; padding: 10px;">
+
+                    <div style="margin-right:20px;">
+                        <img src="{{ listing.photo.url }}" alt="Listing photo" width="150px" height="200px">
+                    </div>
+
+                    <div class="d-flex flex-column align-content-left">
+                        <div class="title" style="margin-bottom: 10px;">
+                            <a href="{% url 'listing' listing_id=listing.id %}" style="width:500px; color: black; font-size: 16px; font-weight:semi-bold;">
+                                {{ listing.title|safe }}
+                            </a>
+                        </div>
+                        <div class="description_small" style="width:600px; font-size: 12px; margin-bottom:10px;">
+                            {{ listing.description|safe }}
+                        </div>
+                        <div class="title" style="margin-bottom:60px;">
+                            {% if listing.status %}
+                            available
+                            {% else %}
+                            sold
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="align-items: right; font-size:15px; font-weight:semi-bold;">
+                            {{ listing.price|safe }} €
+                        </div>
+                        <div>
+                            <form action="{% url 'watchlist_remove' user_id=user.id listing_id=listing.id %}" method="POST" enctype='multipart/form-data'>
+                                {% csrf_token %}
+                                <input class="btn btn-dark" style="width:70px; height:30px; font-size:12px; margin-top:170px; margin-left: -65px;" type="submit" value="remove">
+                        </div>
+                    </div>
+
+                    <hr style="width:110%; margin-top:40px; margin-bottom:0px;" align="right">
+
+                </div>
+
+
+                {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
